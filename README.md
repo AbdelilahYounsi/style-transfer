@@ -1,5 +1,3 @@
-I'll create a comprehensive paragraph for your README file that explains the loss functions in neural style transfer, with the mathematical formulas as presented in the paper. Here's the content you can add:
-
 # Neural Style Transfer: Paper Explanations
 This repository documents my study of foundational papers in neural style transfer. Below are detailed explanations of key concepts from each paper.
 
@@ -29,4 +27,36 @@ $$G^{\phi}_j(x)_{c,c'} = \frac{1}{C_j H_j W_j} \sum_{h=1}^{H_j} \sum_{w=1}^{W_j}
 
 This matrix represents the correlations between different feature channels, effectively capturing style information independent of spatial structure.
 
+## 📄 2. Texture Networks: Feed-forward Synthesis of Textures and Stylized Images  
+Ulyanov et al. (2016)  
+[[Paper Link]](https://arxiv.org/abs/1603.03417)  
 
+### Texture Synthesis Loss  
+The method trains a **feed-forward generator network** \( \mathbf{g}(\mathbf{z}; \theta) \) to synthesize textures by minimizing a texture loss derived from Gram matrix statistics. Given a reference texture \( \mathbf{x}_0 \), the loss matches feature correlations across layers of a fixed VGG descriptor network:  
+
+$$  
+\mathcal{L}_T(\mathbf{x}; \mathbf{x}_0) = \sum_{l \in L_T} \| G^l(\mathbf{x}) - G^l(\mathbf{x}_0) \|_2^2  
+$$  
+
+where \( G^l(\mathbf{x})_{ij} = \langle F^l_i(\mathbf{x}), F^l_j(\mathbf{x}) \rangle \) computes the Gram matrix for layer \( l \), and \( F^l_i(\mathbf{x}) \) denotes the \( i \)-th feature map at layer \( l \). This enforces texture similarity by preserving channel-wise correlations.  
+
+### Style Transfer Objective  
+For stylization, the generator \( \mathbf{g}(\mathbf{y}, \mathbf{z}; \theta) \) takes a content image \( \mathbf{y} \) and noise \( \mathbf{z} \), and optimizes a combined loss:  
+
+$$  
+\theta_{\mathbf{x}_0} = \arg\min_\theta \, \mathbb{E}_{\mathbf{z}, \mathbf{y}} \left[ \mathcal{L}_T(\mathbf{g}(\mathbf{y}, \mathbf{z}; \theta), \mathbf{x}_0) + \alpha \mathcal{L}_C(\mathbf{g}(\mathbf{y}, \mathbf{z}; \theta), \mathbf{y}) \right]  
+$$  
+
+The **content loss** \( \mathcal{L}_C \) matches high-level features at layer \( l \in L_C \):  
+
+$$  
+\mathcal{L}_C(\mathbf{x}, \mathbf{y}) = \sum_{l \in L_C} \sum_{i=1}^{N_l} \| F^l_i(\mathbf{x}) - F^l_i(\mathbf{y}) \|_2^2  
+$$  
+
+where \( \alpha \) balances style and content fidelity.  
+
+### Multi-Scale Architecture  
+The generator uses a **multi-scale convolutional design** with noise inputs \( \{\mathbf{z}_i\} \) at different resolutions. Each scale processes noise through convolutional blocks, upsampling layers, and channel-wise concatenation. The architecture is fully convolutional, enabling arbitrary output sizes. Batch normalization stabilizes training, and lightweight parameters (~65K) ensure real-time synthesis.  
+
+---  
+**Key Innovation**: Shifts computational cost to training, enabling **single-pass generation** at ~500x speedup over optimization-based methods like Gatys et al., while maintaining perceptual quality.
