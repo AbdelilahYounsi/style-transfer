@@ -57,6 +57,29 @@ where \( \alpha \) balances style and content fidelity.
 
 ### Multi-Scale Architecture  
 The generator uses a **multi-scale convolutional design** with noise inputs \( \{\mathbf{z}_i\} \) at different resolutions. Each scale processes noise through convolutional blocks, upsampling layers, and channel-wise concatenation. The architecture is fully convolutional, enabling arbitrary output sizes. Batch normalization stabilizes training, and lightweight parameters (~65K) ensure real-time synthesis.  
+## 📄 3. Instance Normalization: The Missing Ingredient for Fast Stylization  
+Ulyanov et al. (2017)  
+[[Paper Link]](https://arxiv.org/abs/1607.08022)  
 
----  
-**Key Innovation**: Shifts computational cost to training, enabling **single-pass generation** at ~500x speedup over optimization-based methods like Gatys et al., while maintaining perceptual quality.
+### Instance Normalization  
+The paper identifies **batch normalization (BN)** as a key limitation in prior feed-forward stylization networks. BN normalizes activations across a batch of images, causing content-dependent contrast artifacts. Replacing BN with **instance normalization (IN)**, which normalizes each sample independently, resolves this:  
+
+**Batch normalization**:  
+$$  
+y_{tijk} = \frac{x_{tijk} - \mu_i}{\sqrt{\sigma_i^2 + \epsilon}}, \quad  
+\mu_i = \frac{1}{HWT}\sum_{t,l,m} x_{itlm}, \quad  
+\sigma_i^2 = \frac{1}{HWT}\sum_{t,l,m} (x_{itlm} - \mu_i)^2  
+$$  
+
+**Instance normalization**:  
+$$  
+y_{tijk} = \frac{x_{tijk} - \mu_{ti}}{\sqrt{\sigma_{ti}^2 + \epsilon}}, \quad  
+\mu_{ti} = \frac{1}{HW}\sum_{l,m} x_{itlm}, \quad  
+\sigma_{ti}^2 = \frac{1}{HW}\sum_{l,m} (x_{itlm} - \mu_{ti})^2  
+$$  
+
+IN removes instance-specific contrast from content images, aligning stylized outputs with the style’s contrast. Unlike BN, IN is applied at **both training and test time**, ensuring stable behavior.  
+
+### Architectural Impact  
+When integrated into generators from Ulyanov et al. (2016) and Johnson et al. (2016), IN eliminates border artifacts and improves style-content disentanglement (Fig. 5). Training converges faster, and networks generalize better even with small datasets (~16 images). The modified architectures achieve **quality parity with Gatys et al.’s optimization-based method** while retaining real-time speed.  
+
