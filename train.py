@@ -76,7 +76,7 @@ def train(args):
             features_y = vgg(y)
             features_x = vgg(x)
 
-            content_loss = args.content_weight * mse_loss(features_y.relu2_2, features_x.relu2_2)
+            content_loss = args.content_weight * mse_loss(features_y[1], features_x[1])
 
             style_loss = 0.
             for ft_y, gm_s in zip(features_y, gram_style):
