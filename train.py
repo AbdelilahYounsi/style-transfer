@@ -12,7 +12,7 @@ from torchvision import datasets
 from torchvision import transforms
 import torch.onnx
 
-from models.transform_net import TransformNet
+from models.style_transfer_net import StyleNet
 from models.vgg import Vgg16
 from utils import *
 
@@ -41,7 +41,7 @@ def train(args):
     train_dataset = datasets.ImageFolder(args.dataset, transform)
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size)
 
-    transformer = TransformNet().to(device)
+    transformer = StyleNet().to(device)
     optimizer = Adam(transformer.parameters(), args.lr)
     mse_loss = torch.nn.MSELoss()
 
@@ -131,7 +131,7 @@ def stylize(args):
         output = stylize_onnx_caffe2(content_image, args)
     else:
         with torch.no_grad():
-            style_model = TransformNet()
+            style_model = StyleNet()
             state_dict = torch.load(args.model)
             # remove saved deprecated running_* keys in InstanceNorm from the checkpoint
             for k in list(state_dict.keys()):
