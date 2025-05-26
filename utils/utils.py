@@ -24,11 +24,17 @@ def gram_matrix(y):
     gram = features.bmm(features_t) / (ch * h * w)
     return gram
 
+def vgg_preprocess(batch):
+    """
+    VGG preprocessing: subtract mean pixel values
+    """
+    # VGG mean pixel values (BGR format, but RGB is close enough)
+    mean = batch.new_tensor([123.68, 116.779, 103.939]).view(1, 3, 1, 1)
+    return batch - mean
+
 def normalize_batch(batch):
-    # normalize using imagenet mean and std
+    # Keep for backwards compatibility but not used in training
     mean = batch.new_tensor([0.485, 0.456, 0.406]).view(-1, 1, 1)
     std = batch.new_tensor([0.229, 0.224, 0.225]).view(-1, 1, 1)
     batch = batch.div_(255.0)
     return (batch - mean) / std
-
-

@@ -3,7 +3,6 @@ import os
 import sys
 import time
 import re
-
 import numpy as np
 import torch
 from torch.optim import Adam
@@ -13,7 +12,7 @@ from torchvision import transforms
 import torch.onnx
 
 from models.style_transfer_net import StyleNet
-from models.vgg import Vgg16
+from models.vgg import Vgg19  
 from utils import *
 
 def check_paths(args):
@@ -45,7 +44,7 @@ def train(args):
     optimizer = Adam(transformer.parameters(), args.lr)
     mse_loss = torch.nn.MSELoss()
 
-    vgg = Vgg16(requires_grad=False).to(device)
+    vgg = Vgg19(requires_grad=False).to(device)  
     style_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x.mul(255))
@@ -54,8 +53,17 @@ def train(args):
     style = style_transform(style)
     style = style.repeat(args.batch_size, 1, 1, 1).to(device)
 
-    features_style = vgg(normalize_batch(style))
-    gram_style = [gram_matrix(y) for y in features_style]
+    # Use VGG preprocessing 
+    style_preprocessed = vgg_preprocess(style)
+    features_style = vgg(style_preprocessed)
+    
+    
+    style_layers = ['relu1_1', 'relu2_1', 'relu3_1', 'relu4_1', 'relu5_1']
+    gram_style = []
+    for layer in style_layers:
+        features = features_style[layer]
+        gram = gram_matrix(features)
+        gram_style.append(gram)
 
     for e in range(args.epochs):
         transformer.train()
@@ -70,17 +78,22 @@ def train(args):
             x = x.to(device)
             y = transformer(x)
 
-            y = normalize_batch(y)
-            x = normalize_batch(x)
+            # Use VGG preprocessing 
+            y_preprocessed = vgg_preprocess(y)
+            x_preprocessed = vgg_preprocess(x)
 
-            features_y = vgg(y)
-            features_x = vgg(x)
+            features_y = vgg(y_preprocessed)
+            features_x = vgg(x_preprocessed)
 
-            content_loss = args.content_weight * mse_loss(features_y[1], features_x[1])
+            # Content loss using relu4_2 
+            content_loss = args.content_weight * mse_loss(features_y['relu4_2'], features_x['relu4_2'])
 
+            # Style loss using the 5 style layers
             style_loss = 0.
-            for ft_y, gm_s in zip(features_y, gram_style):
+            for i, layer in enumerate(style_layers):
+                ft_y = features_y[layer]
                 gm_y = gram_matrix(ft_y)
+                gm_s = gram_style[i]
                 style_loss += mse_loss(gm_y, gm_s[:n_batch, :, :])
             style_loss *= args.style_weight
 
@@ -128,7 +141,7 @@ def stylize(args):
     content_image = content_image.unsqueeze(0).to(device)
 
     if args.model.endswith(".onnx"):
-        output = stylize_onnx_caffe2(content_image, args)
+        output = stylize_onnx_caffe2(content_image, 640×480args)
     else:
         with torch.no_grad():
             style_model = StyleNet()
@@ -162,18 +175,18 @@ def main():
                                   help="path to folder where trained model will be saved.")
     train_arg_parser.add_argument("--checkpoint-model-dir", type=str, default=None,
                                   help="path to folder where checkpoints of trained models will be saved")
-    train_arg_parser.add_argument("--image-size", type=int, default=256,
-                                  help="size of training images, default is 256 X 256")
+    train_arg_parser.add_argument("--image-size", type=int, default=(640×480),
+                                  help="size of training images, default is 640×480")
     train_arg_parser.add_argument("--style-size", type=int, default=None,
                                   help="size of style-image, default is the original size of style image")
     train_arg_parser.add_argument("--cuda", type=int, required=True,
                                   help="set it to 1 for running on GPU, 0 for CPU")
     train_arg_parser.add_argument("--seed", type=int, default=42,
                                   help="random seed for training")
-    train_arg_parser.add_argument("--content-weight", type=float, default=1e5,
-                                  help="weight for content-loss, default is 1e5")
-    train_arg_parser.add_argument("--style-weight", type=float, default=1e10,
-                                  help="weight for style-loss, default is 1e10")
+    train_arg_parser.add_argument("--content-weight", type=float, default=7.5,
+                                  help="weight for content-loss, default is 7.5")
+    train_arg_parser.add_argument("--style-weight", type=float, default=1e2,
+                                  help="weight for style-loss, default is 1e2")
     train_arg_parser.add_argument("--lr", type=float, default=1e-3,
                                   help="learning rate, default is 1e-3")
     train_arg_parser.add_argument("--log-interval", type=int, default=500,
