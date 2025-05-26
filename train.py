@@ -14,7 +14,6 @@ import torch.onnx
 from models.style_transfer_net import StyleNet
 from models.vgg import Vgg19  
 from utils import *
-
 def check_paths(args):
     try:
         if not os.path.exists(args.save_model_dir):
@@ -26,7 +25,7 @@ def check_paths(args):
         sys.exit(1)
 
 def train(args):
-    device = torch.device("cuda" if args.cuda else "cpu")
+    device = torch.device("cuda:3" if args.cuda else "cpu")
     
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -44,7 +43,7 @@ def train(args):
     optimizer = Adam(transformer.parameters(), args.lr)
     mse_loss = torch.nn.MSELoss()
 
-    vgg = Vgg19(requires_grad=False).to(device)  
+    vgg = Vgg19(requires_grad=False,weights_path = './vgg19-dcbb9e9d.pth').to(device)  
     style_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x.mul(255))
@@ -130,7 +129,7 @@ def train(args):
     print("\nDone, trained model saved at", save_model_path)
 
 def stylize(args):
-    device = torch.device("cuda" if args.cuda else "cpu")
+    device = torch.device("cuda:3" if args.cuda else "cpu")
     
     content_image = load_image(args.content_image, scale=args.content_scale)
     content_transform = transforms.Compose([
@@ -140,20 +139,18 @@ def stylize(args):
     content_image = content_transform(content_image)
     content_image = content_image.unsqueeze(0).to(device)
 
-    if args.model.endswith(".onnx"):
-        output = stylize_onnx_caffe2(content_image, 640×480args)
-    else:
-        with torch.no_grad():
-            style_model = StyleNet()
-            state_dict = torch.load(args.model)
-            # remove saved deprecated running_* keys in InstanceNorm from the checkpoint
-            for k in list(state_dict.keys()):
-                if re.search(r'in\d+\.running_(mean|var)$', k):
-                    del state_dict[k]
-            style_model.load_state_dict(state_dict)
-            style_model.to(device)
-            style_model.eval()
-            output = style_model(content_image).cpu()
+    
+    with torch.no_grad():
+        style_model = StyleNet()
+        state_dict = torch.load(args.model)
+        # remove saved deprecated running_* keys in InstanceNorm from the checkpoint
+        for k in list(state_dict.keys()):
+            if re.search(r'in\d+\.running_(mean|var)$', k):
+                del state_dict[k]
+        style_model.load_state_dict(state_dict)
+        style_model.to(device)
+        style_model.eval()
+        output = style_model(content_image).cpu()
     
     save_image(args.output_image, output[0])
 
@@ -164,29 +161,29 @@ def main():
     train_arg_parser = subparsers.add_parser("train", help="parser for training arguments")
     train_arg_parser.add_argument("--epochs", type=int, default=2,
                                   help="number of training epochs, default is 2")
-    train_arg_parser.add_argument("--batch-size", type=int, default=4,
+    train_arg_parser.add_argument("--batch-size", type=int, default=32,
                                   help="batch size for training, default is 4")
-    train_arg_parser.add_argument("--dataset", type=str, required=True,
+    train_arg_parser.add_argument("--dataset", type=str, required=True, default ='./dataset',
                                   help="path to training dataset, the path should point to a folder "
                                        "containing another folder with all the training images")
-    train_arg_parser.add_argument("--style-image", type=str, default="images/style-images/mosaic.jpg",
+    train_arg_parser.add_argument("--style-image", type=str, default="./style_images/The_Scream.jpg",
                                   help="path to style-image")
-    train_arg_parser.add_argument("--save-model-dir", type=str, required=True,
+    train_arg_parser.add_argument("--save-model-dir", type=str, required=True, default= "./save_model_dir",
                                   help="path to folder where trained model will be saved.")
-    train_arg_parser.add_argument("--checkpoint-model-dir", type=str, default=None,
+    train_arg_parser.add_argument("--checkpoint-model-dir", type=str,default = './checkpoint_model_dir',
                                   help="path to folder where checkpoints of trained models will be saved")
-    train_arg_parser.add_argument("--image-size", type=int, default=(640×480),
+    train_arg_parser.add_argument("--image-size", type=int, default=(640,480),
                                   help="size of training images, default is 640×480")
-    train_arg_parser.add_argument("--style-size", type=int, default=None,
+    train_arg_parser.add_argument("--style-size", type=int, default=(603,768),
                                   help="size of style-image, default is the original size of style image")
-    train_arg_parser.add_argument("--cuda", type=int, required=True,
+    train_arg_parser.add_argument("--cuda", type=str, required=True,
                                   help="set it to 1 for running on GPU, 0 for CPU")
     train_arg_parser.add_argument("--seed", type=int, default=42,
                                   help="random seed for training")
-    train_arg_parser.add_argument("--content-weight", type=float, default=7.5,
-                                  help="weight for content-loss, default is 7.5")
-    train_arg_parser.add_argument("--style-weight", type=float, default=1e2,
-                                  help="weight for style-loss, default is 1e2")
+    train_arg_parser.add_argument("--content-weight", type=float, default=10,
+                                  help="weight for content-loss, default is 10")
+    train_arg_parser.add_argument("--style-weight", type=float, default=1e4,
+                                  help="weight for style-loss, default is 1e4")
     train_arg_parser.add_argument("--lr", type=float, default=1e-3,
                                   help="learning rate, default is 1e-3")
     train_arg_parser.add_argument("--log-interval", type=int, default=500,

@@ -6,14 +6,6 @@ A PyTorch implementation of fast neural style transfer based on the papers:
 
 This implementation uses **Instance Normalization** instead of Batch Normalization for better stylization results.
 
-## Features
-
-- Fast style transfer using feedforward networks
-- Instance normalization for improved quality
-- GPU acceleration support
-- Easy training and evaluation scripts
-- Clean PyTorch implementation
-
 ## Requirements
 
 ```bash
@@ -48,22 +40,22 @@ python train.py eval --content-image /path/to/content/image.jpg \
 
 ## Model Architecture
 
-- **Transform Network**: Encoder-decoder architecture with residual blocks
-- **Loss Network**: Pre-trained VGG16 for perceptual losses
+- **Transform Network**: Encoder-decoder architecture with residual blocks and instance normalization
+- **Loss Network**: Pre-trained VGG19 for perceptual losses
 - **Instance Normalization**: Applied after each convolutional layer
 - **Residual Connections**: 5 residual blocks in the bottleneck
 
 ## Training Details
 
-- **Content Loss**: Computed using VGG16 relu2_2 features
-- **Style Loss**: Computed using Gram matrices from multiple VGG16 layers
+- **Content Loss**: Computed using VGG19 relu4_2 features
+- **Style Loss**: Computed using Gram matrices from multiple VGG19 layers
 - **Optimizer**: Adam with learning rate 1e-3
-- **Image Size**: 256x256 during training
+- **Image Size**: 640 during training
 
 ## Dataset
 
 For training, you'll need:
-- **MS COCO dataset** for content images
+- **MS COCO dataset** for content images (or any other dataset)
 - **Style images** (paintings/artistic images)
 
 Download MS COCO:
