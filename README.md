@@ -2,6 +2,7 @@
 
 A PyTorch implementation of fast neural style transfer based on the papers:
 - [Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155)
+- [Texture Networks_ Feed-forward Synthesis of Textures and Stylized Images](https://arxiv.org/abs/1603.03417)
 - [Instance Normalization: The Missing Ingredient for Fast Stylization](https://arxiv.org/abs/1607.08022)
 
 This implementation uses **Instance Normalization** instead of Batch Normalization for better stylization results.
@@ -24,6 +25,13 @@ python train.py train --dataset /path/to/coco/dataset \
                      --save-model-dir ./models \
                      --epochs 2 \
                      --batch-size 4 \
+                     --save-model-dir /path/to/save_model_dir \
+                     --checkpoint-model-dir /path/to/checkpoint \
+                     --image-size 640 \
+                     --style-size 900 \
+                     --content-weight 10 \
+                     --style-weight 1000 \
+                     --lr 1e-3 \
                      --cuda 1
 ```
 
@@ -55,13 +63,13 @@ python train.py eval --content-image /path/to/content/image.jpg \
 ## Dataset
 
 For training, you'll need:
-- **MS COCO dataset** for content images (or any other dataset)
+- **Only a small dataset of images** I used 2000 images of coco dataset
 - **Style images** (paintings/artistic images)
 
 Download MS COCO:
 ```bash
-wget http://images.cocodataset.org/zips/train2014.zip
-unzip train2014.zip
+wget http://images.cocodataset.org/zips/test2014.zip
+unzip test2014.zip
 ```
 
 ## Results
@@ -70,9 +78,8 @@ The trained models can stylize images in real-time while preserving content stru
 
 ## References
 
-- Original TensorFlow implementation by Logan Engstrom
-- Johnson et al. "Perceptual Losses for Real-Time Style Transfer and Super-Resolution"
-- Ulyanov et al. "Instance Normalization: The Missing Ingredient for Fast Stylization"
+- [Lengstrom implementation](https://github.com/lengstrom/fast-style-transfer)
+
 
 ## License
 
