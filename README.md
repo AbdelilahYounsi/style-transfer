@@ -6,7 +6,11 @@ A PyTorch implementation of fast neural style transfer based on the papers:
 - [Instance Normalization: The Missing Ingredient for Fast Stylization](https://arxiv.org/abs/1607.08022)
 
 This implementation uses **Instance Normalization** instead of Batch Normalization for better stylization results.
-
+<p align = 'center'>
+<img src = 'content/Mosque_Hassan2.jpeg' height = '246px'>
+<img src = 'style_images/the_scream.jpeg' height = '246px'>
+<img src = 'stylized_images/stylized_Mosque_Hassan2.jpeg' height = '246px'>
+</p>
 ## Requirements
 
 ```bash
