@@ -11,6 +11,11 @@ This implementation uses **Instance Normalization** instead of Batch Normalizati
 <img src = 'style_images/the_scream.jpeg' height = '246px'>
 <img src = 'stylized_images/stylized_Mosque_Hassan2.jpeg' height = '246px'>
 </p>
+<p align = 'center'>
+<img src = 'content/Tour_Eiffel.jpeg' height = '246px'>
+<img src = 'style_images/the_scream.jpeg' height = '246px'>
+<img src = 'stylized_images/stylized_Tour_Eiffel.jpeg' height = '246px'>
+</p>
 ## Requirements
 
 ```bash
