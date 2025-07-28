@@ -62,7 +62,7 @@ The **content loss** ```math\mathcal{L}_C``` matches high-level features at laye
 \mathcal{L}_C(\mathbf{x}, \mathbf{y}) = \sum_{l \in L_C} \sum_{i=1}^{N_l} \| F^l_i(\mathbf{x}) - F^l_i(\mathbf{y}) \|_2^2  
 ```  
 
-where \( \alpha \) balances style and content fidelity.  
+where $\alpha$ balances style and content fidelity.  
 
 ### Multi-Scale Architecture  
 The generator uses a **multi-scale convolutional design** with noise inputs \( \{\mathbf{z}_i\} \) at different resolutions. Each scale processes noise through convolutional blocks, upsampling layers, and channel-wise concatenation. The architecture is fully convolutional, enabling arbitrary output sizes. Batch normalization stabilizes training, and lightweight parameters (~65K) ensure real-time synthesis.  
