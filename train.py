@@ -52,7 +52,7 @@ def train(args):
     style = style_transform(style)
     style = style.repeat(args.batch_size, 1, 1, 1).to(device)
 
-    # Use VGG preprocessing 
+    # VGG preprocessing 
     style_preprocessed = vgg_preprocess(style)
     features_style = vgg(style_preprocessed)
     
@@ -77,7 +77,7 @@ def train(args):
             x = x.to(device)
             y = transformer(x)
 
-            # Use VGG preprocessing 
+            # VGG preprocessing 
             y_preprocessed = vgg_preprocess(y)
             x_preprocessed = vgg_preprocess(x)
 
@@ -87,7 +87,7 @@ def train(args):
             # Content loss using relu4_2 
             content_loss = args.content_weight * mse_loss(features_y['relu4_2'], features_x['relu4_2'])
 
-            # Style loss using the 5 style layers
+            # Style loss using the 5 style layers (see papers)
             style_loss = 0.
             for i, layer in enumerate(style_layers):
                 ft_y = features_y[layer]
@@ -143,7 +143,6 @@ def stylize(args):
     with torch.no_grad():
         style_model = StyleNet()
         state_dict = torch.load(args.model)
-        # remove saved deprecated running_* keys in InstanceNorm from the checkpoint
         for k in list(state_dict.keys()):
             if re.search(r'in\d+\.running_(mean|var)$', k):
                 del state_dict[k]
