@@ -65,7 +65,7 @@ The **content loss** $\mathcal{L}_C$ matches high-level features at layer l in $
 where $\alpha$ balances style and content fidelity.  
 
 ### Multi-Scale Architecture  
-The generator uses a **multi-scale convolutional design** with noise inputs \( \{\mathbf{z}_i\} \) at different resolutions. Each scale processes noise through convolutional blocks, upsampling layers, and channel-wise concatenation. The architecture is fully convolutional, enabling arbitrary output sizes. Batch normalization stabilizes training, and lightweight parameters (~65K) ensure real-time synthesis.  
+The generator uses a **multi-scale convolutional design** with noise inputs $\{\mathbf{z}_i\}$ at different resolutions. Each scale processes noise through convolutional blocks, upsampling layers, and channel-wise concatenation. The architecture is fully convolutional, enabling arbitrary output sizes. Batch normalization stabilizes training, and lightweight parameters (~65K) ensure real-time synthesis.  
 ## 📄 3. Instance Normalization: The Missing Ingredient for Fast Stylization  
 Ulyanov et al. (2017)  
 [[Paper Link]](https://arxiv.org/abs/1607.08022)  
