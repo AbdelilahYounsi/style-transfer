@@ -5,7 +5,7 @@ A PyTorch implementation of fast neural style transfer based on the papers:
 - [Texture Networks_ Feed-forward Synthesis of Textures and Stylized Images](https://arxiv.org/abs/1603.03417)
 - [Instance Normalization: The Missing Ingredient for Fast Stylization](https://arxiv.org/abs/1607.08022)
 
-Please refer to '' in order to understand the content of the research papers.
+Please refer to 'paper_explanations.md' in order to understand the content of the research papers.
 
 This implementation uses **Instance Normalization** instead of Batch Normalization for better stylization results.
 <p align = 'center'>
