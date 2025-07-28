@@ -38,9 +38,11 @@ Ulyanov et al. (2016)
 ### Texture Synthesis Loss  
 The method trains a **feed-forward generator network** \( \mathbf{g}(\mathbf{z}; \theta) \) to synthesize textures by minimizing a texture loss derived from Gram matrix statistics. Given a reference texture \( \mathbf{x}_0 \), the loss matches feature correlations across layers of a fixed VGG descriptor network:  
 
-$$  
+
+```math  
 \mathcal{L}_T(\mathbf{x}; \mathbf{x}_0) = \sum_{l \in L_T} \| G^l(\mathbf{x}) - G^l(\mathbf{x}_0) \|_2^2  
-$$  
+
+```
 
 where \( G^l(\mathbf{x})_{ij} = \langle F^l_i(\mathbf{x}), F^l_j(\mathbf{x}) \rangle \) computes the Gram matrix for layer \( l \), and \( F^l_i(\mathbf{x}) \) denotes the \( i \)-th feature map at layer \( l \). This enforces texture similarity by preserving channel-wise correlations.  
 
