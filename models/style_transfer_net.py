@@ -6,7 +6,7 @@ class StyleNet(nn.Module):
     def __init__(self):
         super(StyleNet, self).__init__()
         
-        # Initial convolution layers
+        # Convolution layers
         self.conv1 = ConvLayer(3, 32, kernel_size=9, stride=1)
         self.in1 = nn.InstanceNorm2d(32, affine=True)
         
@@ -62,11 +62,6 @@ class ConvLayer(nn.Module):
         return out
 
 class ResidualBlock(nn.Module):
-    """ResidualBlock
-    introduced in: https://arxiv.org/abs/1512.03385
-    recommended architecture: http://torch.ch/blog/2016/02/04/resnets.html
-    """
-
     def __init__(self, channels):
         super(ResidualBlock, self).__init__()
         self.conv1 = ConvLayer(channels, channels, kernel_size=3, stride=1)
