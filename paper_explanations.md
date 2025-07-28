@@ -24,6 +24,8 @@ $$\ell^{\phi,j}_{style}(\hat{y}, y) = \|G^{\phi}_j(\hat{y}) - G^{\phi}_j(y)\|^2_
 where the Gram matrix $G^{\phi}_j(x)$ is defined as:
 
 $$(G^{\phi}_j(x))_{c,c'} = \frac{1}{C_j H_j W_j} \sum_{h=1}^{H_j} \sum_{w=1}^{W_j} \phi_j(x)_{h,w,c} \cdot \phi_j(x)_{h,w,c'}$$
+
+
 This matrix represents the correlations between different feature channels, effectively capturing style information independent of spatial structure.
 
 
