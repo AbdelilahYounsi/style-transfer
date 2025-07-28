@@ -40,23 +40,23 @@ Ulyanov et al. (2016)
 [[Paper Link]](https://arxiv.org/abs/1603.03417)  
 
 ### Texture Synthesis Loss  
-The method trains a **feed-forward generator network** \( \mathbf{g}(\mathbf{z}; \theta) \) to synthesize textures by minimizing a texture loss derived from Gram matrix statistics. Given a reference texture \( \mathbf{x}_0 \), the loss matches feature correlations across layers of a fixed VGG descriptor network:  
+The method trains a **feed-forward generator network** ```math \mathbf{g}(\mathbf{z}; \theta)``` to synthesize textures by minimizing a texture loss derived from Gram matrix statistics. Given a reference texture ```math\mathbf{x}_0```, the loss matches feature correlations across layers of a fixed VGG descriptor network:  
 
 
 ```math  
 \mathcal{L}_T(\mathbf{x}; \mathbf{x}_0) = \sum_{l \in L_T} \| G^l(\mathbf{x}) - G^l(\mathbf{x}_0) \|_2^2  
 ```
 
-where $G^l(\mathbf{x})_{ij} = \langle F^l_i(\mathbf{x}), F^l_j(\mathbf{x}) \rangle $ computes the Gram matrix for layer \( l \), and \( F^l_i(\mathbf{x}) \) denotes the \( i \)-th feature map at layer \( l \). This enforces texture similarity by preserving channel-wise correlations.  
+where ```mathG^l(\mathbf{x})_{ij} = \langle F^l_i(\mathbf{x}), F^l_j(\mathbf{x}) \rangle``` computes the Gram matrix for layer l , and ```math F^l_i(\mathbf{x})``` denotes the i-th feature map at layer l. This enforces texture similarity by preserving channel-wise correlations.  
 
 ### Style Transfer Objective  
-For stylization, the generator \( \mathbf{g}(\mathbf{y}, \mathbf{z}; \theta) \) takes a content image \( \mathbf{y} \) and noise \( \mathbf{z} \), and optimizes a combined loss:  
+For stylization, the generator ```math\mathbf{g}(\mathbf{y}, \mathbf{z}; \theta``` takes a content image ```math\mathbf{y}``` and noise ```math\mathbf{z}```, and optimizes a combined loss:  
 
 ```math  
 \theta_{\mathbf{x}_0} = \arg\min_\theta \, \mathbb{E}_{\mathbf{z}, \mathbf{y}} \left[ \mathcal{L}_T(\mathbf{g}(\mathbf{y}, \mathbf{z}; \theta), \mathbf{x}_0) + \alpha \mathcal{L}_C(\mathbf{g}(\mathbf{y}, \mathbf{z}; \theta), \mathbf{y}) \right]  
 ```  
 
-The **content loss** \( \mathcal{L}_C \) matches high-level features at layer \( l \in L_C \):  
+The **content loss** ```math\mathcal{L}_C``` matches high-level features at layer l in ```mathL_C```:  
 
 ```math  
 \mathcal{L}_C(\mathbf{x}, \mathbf{y}) = \sum_{l \in L_C} \sum_{i=1}^{N_l} \| F^l_i(\mathbf{x}) - F^l_i(\mathbf{y}) \|_2^2  
