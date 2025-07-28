@@ -47,7 +47,7 @@ The method trains a **feed-forward generator network** \( \mathbf{g}(\mathbf{z};
 \mathcal{L}_T(\mathbf{x}; \mathbf{x}_0) = \sum_{l \in L_T} \| G^l(\mathbf{x}) - G^l(\mathbf{x}_0) \|_2^2  
 ```
 
-where \( G^l(\mathbf{x})_{ij} = \langle F^l_i(\mathbf{x}), F^l_j(\mathbf{x}) \rangle \) computes the Gram matrix for layer \( l \), and \( F^l_i(\mathbf{x}) \) denotes the \( i \)-th feature map at layer \( l \). This enforces texture similarity by preserving channel-wise correlations.  
+where $G^l(\mathbf{x})_{ij} = \langle F^l_i(\mathbf{x}), F^l_j(\mathbf{x}) \rangle $ computes the Gram matrix for layer \( l \), and \( F^l_i(\mathbf{x}) \) denotes the \( i \)-th feature map at layer \( l \). This enforces texture similarity by preserving channel-wise correlations.  
 
 ### Style Transfer Objective  
 For stylization, the generator \( \mathbf{g}(\mathbf{y}, \mathbf{z}; \theta) \) takes a content image \( \mathbf{y} \) and noise \( \mathbf{z} \), and optimizes a combined loss:  
