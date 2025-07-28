@@ -28,7 +28,6 @@ def vgg_preprocess(batch):
     """
     VGG preprocessing: subtract mean pixel values
     """
-    # VGG mean pixel values (BGR format, but RGB is close enough)
     mean = batch.new_tensor([123.68, 116.779, 103.939]).view(1, 3, 1, 1)
     return batch - mean
 
