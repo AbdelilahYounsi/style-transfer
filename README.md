@@ -24,13 +24,22 @@ This implementation uses **Instance Normalization** instead of Batch Normalizati
 
 ---
 
+## 🌐 Streamlit App Preview
+
+<p align="center">
+<img src="other/streamlit_app.png" width="800px">
+</p>
+
+The Streamlit interface allows users to upload a **content image** and a **style image**, then instantly visualize the stylized result and download it.
+
+---
 ## Requirements
 
 ```bash
 pip install torch torchvision pillow numpy
 ```
 
-## Usage
+## Training your own stylist model
 
 ### Training
 
@@ -62,6 +71,28 @@ python train.py eval --content-image /path/to/content/image.jpg \
                     --output-image ./output.jpg \
                     --cuda 1
 ```
+
+## Run the app
+
+To run the streamlit app, you need to run the following command (after pulling the repo and installing the requirements):
+```
+bash
+streamlit run streamlit_app.py
+```
+
+## Docker Usage
+
+If you don't want to install the requirements, you can build a docker image and then run it:
+```
+bash
+docker build -t style-transfer .
+
+```
+```
+bash 
+docker run -p 8501:8501 style-transfer
+```
+Then open http://localhost:8501 in your browser.
 
 ## Model Architecture
 
