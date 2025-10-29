@@ -8,16 +8,21 @@ A PyTorch implementation of fast neural style transfer based on the papers:
 Please refer to 'paper_explanations.md' in order to understand the content of the research papers.
 
 This implementation uses **Instance Normalization** instead of Batch Normalization for better stylization results.
-<p align = 'center'>
-<img src = 'content/Mosque_Hassan2.jpeg' height = '246px'>
-<img src = 'style_images/the_scream.jpeg' height = '246px'>
-<img src = 'stylized_images/stylized_Mosque_Hassan2.jpeg' height = '246px'>
+## 🎨 Example Results
+
+<p align="center">
+<img src="content/Mosque_Hassan2.jpeg" height="246px">
+<img src="style_images/the_scream.jpeg" height="246px">
+<img src="stylized_images/stylized_Mosque_Hassan2.jpeg" height="246px">
 </p>
-<p align = 'center'>
-<img src = 'content/Tour_Eiffel.jpeg' height = '246px'>
-<img src = 'style_images/the_scream.jpeg' height = '246px'>
-<img src = 'stylized_images/stylized_Tour_Eiffel.jpeg' height = '246px'>
+
+<p align="center">
+<img src="content/Tour_Eiffel.jpeg" height="246px">
+<img src="style_images/the_scream.jpeg" height="246px">
+<img src="stylized_images/stylized_Tour_Eiffel.jpeg" height="246px">
 </p>
+
+---
 
 ## Requirements
 
