@@ -1,0 +1,27 @@
+# Ignore unnecessary stuff
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.db
+
+# Ignore development / training data
+content/
+style_images/
+stylized_images/
+train.py
+
+# Ignore documentation
+README.md
+paper_explanations.md
+
+# Ignore Git metadata
+.git/
+.gitignore
+
+# Ignore environment or OS files
+.env
+.DS_Store
+.vscode/
+.idea/
