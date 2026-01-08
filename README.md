@@ -8,7 +8,7 @@ A PyTorch implementation of fast neural style transfer based on the papers:
 Please refer to 'paper_explanations.md' in order to understand the content of the research papers.
 
 This implementation uses **Instance Normalization** instead of Batch Normalization for better stylization results.
-## 🎨 Example Results
+## Example Results
 
 <p align="center">
 <img src="content/Mosque_Hassan2.jpeg" height="246px">
@@ -24,7 +24,7 @@ This implementation uses **Instance Normalization** instead of Batch Normalizati
 
 ---
 
-## 🌐 Streamlit App Preview
+## Streamlit App Preview
 
 <p align="center">
 <img src="other/streamlit_app.png" width="800px">
