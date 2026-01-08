@@ -33,6 +33,14 @@ This implementation uses **Instance Normalization** instead of Batch Normalizati
 The Streamlit interface allows users to upload a **content image** and a **style image**, then instantly visualize the stylized result and download it.
 
 ---
+
+## Network Architecture
+
+<p align="center">
+<img src="other/stylenet.png" width="800px">
+</p>
+
+This photo was taken from the research paper of Johnson et al. (2016) [[Paper Link]](https://arxiv.org/abs/1603.08155)
 ## Requirements
 
 ```bash
