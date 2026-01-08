@@ -1,7 +1,7 @@
 # Neural Style Transfer: Paper Explanations
 This repository documents my study of foundational papers in neural style transfer. Below are detailed explanations of key concepts from each paper.
 
-## 📄 1. Perceptual Losses for Real-Time Style Transfer and Super-Resolution  
+## 1. Perceptual Losses for Real-Time Style Transfer and Super-Resolution  
 Johnson et al. (2016) 
 [[Paper Link]](https://arxiv.org/abs/1603.08155)
 
@@ -35,7 +35,7 @@ where the Gram matrix $G^{\phi}_j(x)$ is defined as:
 This matrix represents the correlations between different feature channels, effectively capturing style information independent of spatial structure.
 
 
-## 📄 2. Texture Networks: Feed-forward Synthesis of Textures and Stylized Images  
+## 2. Texture Networks: Feed-forward Synthesis of Textures and Stylized Images  
 Ulyanov et al. (2016)  
 [[Paper Link]](https://arxiv.org/abs/1603.03417)  
 
@@ -66,7 +66,7 @@ where $\alpha$ balances style and content fidelity.
 
 ### Multi-Scale Architecture  
 The generator uses a **multi-scale convolutional design** with noise inputs $\{\mathbf{z}_i\}$ at different resolutions. Each scale processes noise through convolutional blocks, upsampling layers, and channel-wise concatenation. The architecture is fully convolutional, enabling arbitrary output sizes. Batch normalization stabilizes training, and lightweight parameters (~65K) ensure real-time synthesis.  
-## 📄 3. Instance Normalization: The Missing Ingredient for Fast Stylization  
+## 3. Instance Normalization: The Missing Ingredient for Fast Stylization  
 Ulyanov et al. (2017)  
 [[Paper Link]](https://arxiv.org/abs/1607.08022)  
 
